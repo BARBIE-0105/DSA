@@ -1,20 +1,22 @@
  class Solution {
-    List<List<Integer>> list=new ArrayList<>();
     public List<List<Integer>> combinationSum3(int k, int n) {
-        combi(1,k,n,new ArrayList<>(),0);
-        return list;
+        List<List<Integer>> ans = new ArrayList<>();
+        findCombination(k, 1, n, new ArrayList<>(), ans);
+        return ans; 
     }
-    public void combi(int val,int k,int n,List<Integer> curr,int sum){
-        if(sum==n && curr.size()==k){
-            list.add(new ArrayList<>(curr));
+
+    public static void findCombination(int k, int num, int target, ArrayList<Integer> lst, List<List<Integer>> ans) {
+        // If target is reached and k elements are used
+        if (target == 0 && k == 0) {
+            ans.add(new ArrayList<>(lst));
             return;
         }
-        if(val >9 || sum>n || curr.size()>k){
-            return;
+
+        for (int i = num; i < 10; i++) {
+            if (i > target || k <= 0) break; // Prune unnecessary calls
+            lst.add(i); // Choose the current number
+            findCombination(k - 1, i + 1, target - i, lst, ans); // Recurse
+            lst.remove(lst.size() - 1); // Backtrack
         }
-        curr.add(val);
-        combi(val+1,k,n,curr,sum+val);
-        curr.remove(curr.size()-1);
-        combi(val+1,k,n,curr,sum);
     }
 }
